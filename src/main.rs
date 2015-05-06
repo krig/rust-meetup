@@ -28,6 +28,9 @@ fn roman(num: u64) -> String {
         roman_part(s, (num % 100) / 10, 10, "X", "L");
         roman_part(s, num % 10, 1, "I", "V");
     }
+    if num > 3999 {
+        panic!("Requested number is unreasonably large.");
+    }
     let mut s = String::new();
     roman_rec(&mut s, num);
     s
