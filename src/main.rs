@@ -1,40 +1,50 @@
 use std::io;
 
 fn roman(num: u64) -> String {
-    fn roman2(num: u64, mul: u64, base: &str, mid: &str) -> String {
-        match num {
-            1 => base.to_string(),
-            2...3 => format!("{}{}", roman(1 * mul), roman((num - 1) * mul)),
-            4 => format!("{}{}", roman(1 * mul), roman(5 * mul)),
-            5 => mid.to_string(),
-            6...8 => format!("{}{}", roman((num - 5) * mul), roman(5 * mul)),
-            9 => format!("{}{}", roman(1 * mul), roman(10 * mul)),
-            _ => "".to_string()
+    fn roman_rec(s: &mut String, num: u64) {
+        fn roman_part(s: &mut String, num: u64, mul: u64, base: &str, mid: &str) {
+            if num < 1 || num > 9 {
+                // fall through
+            } else if num == 1 {
+                s.push_str(base);
+            } else if num < 4 {
+                roman_rec(s, 1 * mul);
+                roman_rec(s, (num - 1) * mul);
+            } else if num == 4 {
+                roman_rec(s, 1 * mul);
+                roman_rec(s, 5 * mul);
+            } else if num == 5 {
+                s.push_str(mid);
+            } else if num < 9 {
+                roman_rec(s, (num - 5) * mul);
+                roman_rec(s, 5 * mul);
+            } else {
+                roman_rec(s, 1 * mul);
+                roman_rec(s, 10 * mul);
+            }
         }
+        roman_part(s, num / 1000, 1000, "M", "MMMMM");
+        roman_part(s, (num % 1000) / 100, 100, "C", "D");
+        roman_part(s, (num % 100) / 10, 10, "X", "L");
+        roman_part(s, num % 10, 1, "I", "V");
     }
-
-    format!("{}{}{}{}",
-            roman2(num / 1000, 1000, "M", "MMMMM"),
-            roman2((num % 1000) / 100, 100, "C", "D"),
-            roman2((num % 100) / 10, 10, "X", "L"),
-            roman2(num % 10, 1, "I", "V"))
+    let mut s = String::new();
+    roman_rec(&mut s, num);
+    s
 }
 
-macro_rules! assert_eq {
+macro_rules! eq {
     ($a: expr, $b: expr) => {
-        {
-            let a = $a;
-            let b = $b;
-            assert!(a == b);
-        }
+        assert!($a == $b);
     }
 }
 
 #[test]
 fn basic_conversion() {
-    assert_eq!(&roman(1954), "MCMLIV");
-    assert_eq!(&roman(1990), "MCMXC");
-    assert_eq!(&roman(2014), "MMXIV");
+    eq!(&roman(1954), "MCMLIV");
+    eq!(&roman(1990), "MCMXC");
+    eq!(&roman(2014), "MMXIV");
+    eq!(&roman(2015), "MMXV");
 }
 
 // https://github.com/rust-lang/rust/issues/12327
