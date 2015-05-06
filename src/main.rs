@@ -1,7 +1,7 @@
 use std::io;
 
 fn roman(num: u64) -> String {
-    fn roman2(num: u64, mul: u64, base: &'static str, mid: &'static str) -> String {
+    fn roman2(num: u64, mul: u64, base: &str, mid: &str) -> String {
         match num {
             1 => base.to_string(),
             2...3 => format!("{}{}", roman(1 * mul), roman((num - 1) * mul)),
@@ -32,9 +32,9 @@ macro_rules! assert_eq {
 
 #[test]
 fn basic_conversion() {
-    assert_eq!(roman(1954), "MCMLIV".to_string());
-    assert_eq!(roman(1990), "MCMXC".to_string());
-    assert_eq!(roman(2014), "MMXIV".to_string());
+    assert_eq!(&roman(1954), "MCMLIV");
+    assert_eq!(&roman(1990), "MCMXC");
+    assert_eq!(&roman(2014), "MMXIV");
 }
 
 fn main() {
