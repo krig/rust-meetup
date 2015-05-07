@@ -31,7 +31,7 @@ fn roman(num: u64) -> String {
     if num > 3999 {
         panic!("Requested number is unreasonably large.");
     }
-    let mut s = String::new();
+    let mut s = String::with_capacity(24);
     roman_rec(&mut s, num);
     s
 }
