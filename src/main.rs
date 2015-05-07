@@ -55,7 +55,7 @@ fn basic_conversion() {
 fn main() {
     loop {
         println!("Enter a number: ");
-        let mut buf = String::new();
+        let mut buf = String::with_capacity(24);
         io::stdin().read_line(&mut buf).ok().expect("failed to read line");
         let input: Option<u64> = buf.trim().parse().ok();
         if let Some(num) = input {
