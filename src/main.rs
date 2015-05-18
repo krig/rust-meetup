@@ -38,16 +38,22 @@ fn roman(num: u64) -> String {
 
 macro_rules! eq {
     ($a: expr, $b: expr) => {
-        assert!($a == $b);
+        if $a != $b {
+            panic!(concat!("Assertion failed: ",
+                           stringify!($a),
+                           " == ",
+                           stringify!($b),
+                           ": expected {}, got {}"), $a, $b);
+        }
     }
 }
 
 #[test]
 fn basic_conversion() {
-    eq!(&roman(1954), "MCMLIV");
-    eq!(&roman(1990), "MCMXC");
-    eq!(&roman(2014), "MMXIV");
-    eq!(&roman(2015), "MMXV");
+    eq!("MCMLIV", &roman(1954));
+    eq!("MCMXC", &roman(1990));
+    eq!("MMXIV", &roman(2014));
+    eq!("MMXIV", &roman(2015));
 }
 
 // https://github.com/rust-lang/rust/issues/12327
