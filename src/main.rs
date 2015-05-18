@@ -62,13 +62,17 @@ fn main() {
     loop {
         println!("Enter a number: ");
         let mut buf = String::with_capacity(24);
-        io::stdin().read_line(&mut buf).ok().expect("failed to read line");
-        let input: Option<u64> = buf.trim().parse().ok();
-        if let Some(num) = input {
-            println!("{}", roman(num))
-        } else {
-            println!("Je suis Charlie");
+        if let None = io::stdin().read_line(&mut buf).ok() {
+            println!("Failed to read input");
             return
+        }
+        let input: Option<u64> = buf.trim().parse().ok();
+        match input {
+            Some(num) => println!("{}", roman(num)),
+            None => {
+                println!("Not a number");
+                return
+            }
         }
     }
 }
