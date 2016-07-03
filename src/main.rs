@@ -56,8 +56,6 @@ fn basic_conversion() {
     eq!("MMXIV", &roman(2015));
 }
 
-// https://github.com/rust-lang/rust/issues/12327
-#[allow(dead_code)]
 fn main() {
     loop {
         println!("Enter a number: ");
